@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\ComponentesController;
+use App\Http\Controllers\HerramientasController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PrototiposController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    
+    Route::get('/componentes', [ComponentesController::class, "index"])->name('componentes');
+    Route::get('/herramientas', [HerramientasController::class, "index"])->name('herramientas');
+    Route::get('/prototipos', [PrototiposController::class, "index"])->name('prototipos');
+    Route::get('/barcode', [BarcodeController::class, "index"])->name('barcode');
+
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
