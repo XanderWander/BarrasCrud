@@ -12,7 +12,7 @@ class PrototiposController extends Controller
     public function index()
     {
         $prototipos = Prototipo::all(); // Obtener todos los prototipos
-        return Inertia::render('Prototipos/Index', [
+        return Inertia::render('Prototipos', [
             'prototipos' => $prototipos,
         ]);
     }

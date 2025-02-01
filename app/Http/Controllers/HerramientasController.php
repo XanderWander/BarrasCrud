@@ -12,7 +12,7 @@ class HerramientasController extends Controller
     public function index()
     {
         $herramientas = Herramienta::all(); 
-        return Inertia::render('Herramientas/Index', [
+        return Inertia::render('Herramientas', [
             'herramientas' => $herramientas, 
         ]);
     }

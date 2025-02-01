@@ -12,7 +12,7 @@ class ComponentesController extends Controller
     public function index()
     {
         $componentes = Componente::all(); 
-        return Inertia::render('Componentes/Index', [
+        return Inertia::render('Componentes', [
             'componentes' => $componentes,
         ]);
     }
@@ -43,7 +43,7 @@ class ComponentesController extends Controller
         ]);
 
        
-        return redirect()->route('componentes.index')->with('success', 'Componente creado correctamente.');
+        return redirect()->route('componentes')->with('success', 'Componente creado correctamente.');
     }
 
    
@@ -73,7 +73,7 @@ class ComponentesController extends Controller
             'observacion' => $request->observacion,
         ]);
 
-        return redirect()->route('componentes.index')->with('success', 'Componente actualizado correctamente.');
+        return redirect()->route('componentes')->with('success', 'Componente actualizado correctamente.');
     }
 
     // Eliminar un componente
@@ -82,6 +82,6 @@ class ComponentesController extends Controller
         $componente = Componente::findOrFail($id); 
         $componente->delete(); 
 
-        return redirect()->route('componentes.index')->with('success', 'Componente eliminado correctamente.');
+        return redirect()->route('componentes')->with('success', 'Componente eliminado correctamente.');
     }
 }

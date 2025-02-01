@@ -1,15 +1,108 @@
-import React from 'react';
+import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import TableComponent from '@/Components/TableComponent';
+import Modal2 from '@/Components/Modal2';
+import Swal from 'sweetalert2';
+import { router } from '@inertiajs/react'
 
-export default function Componentes({ auth, componentes }) {
-    const handleDelete = (id) => {
-        if (confirm('¿Estás seguro de eliminar este componente?')) {
-            Inertia.delete(/componentes/${id})
-                .catch(() => alert('Error al eliminar el componente'));
+export default function Componentes({ auth }) {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [searchTerm, setSearchTerm] = useState("");
+    const { componentes } = usePage().props;
+    const [filteredData, setFilteredData] = useState(componentes);
+    const { data, setData, post, processing, errors } = useForm({
+        serial: '',
+        descripcion: '',
+        categoria: '',
+        observacion: '',
+    });
+
+
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
+
+
+    const handleSearch = (e) => {
+        const term = e.target.value.toLowerCase();
+        setSearchTerm(term);
+
+        if (term === "") {
+            setFilteredData(componentes);
+        } else {
+            const filtered = componentes.filter((item) =>
+                Object.values(item).some((value) =>
+                    String(value).toLowerCase().includes(term)
+                )
+            );
+            setFilteredData(filtered);
         }
     };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post('/componentes'), {
+            onSuccess: () => {
+                Swal.fire({
+                    title: '¡Información enviada con éxito!',
+                    icon: 'success',
+                    draggable: true,
+                });
+            },
+            onError: (errors) => {
+                // Mostrar SweetAlert2 si hay errores
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al enviar la información.',
+                    icon: 'error',
+                    draggable: true,
+                });
+            },
+        };
+    };
+
+
+
+
+
+   
+
+    const eliminarComponente = (id) => {
+        // Mostrar un diálogo de confirmación con SweetAlert2
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¡No podrás revertir esto!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, hacer la solicitud DELETE
+                router.delete(`/componentes/${id}`, {
+                    onSuccess: () => {
+                        Swal.fire({
+                            title: '¡Eliminado!',
+                            text: 'El componente ha sido eliminado.',
+                            icon: 'success',
+                        });
+                    },
+                    onError: () => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Hubo un problema al eliminar el componente.',
+                            icon: 'error',
+                        });
+                    },
+                });
+            }
+        });
+    };
+
+
+
 
     return (
         <AuthenticatedLayout
@@ -18,77 +111,118 @@ export default function Componentes({ auth, componentes }) {
         >
             <Head title="Componentes" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <h1 className="text-2xl font-bold mb-4">Lista de Componentes</h1>
-                            <Link
-                                href="/componentes/crear"
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mb-4 inline-block"
-                            >
-                                Agregar Componente
-                            </Link>
-                            <div className="overflow-x-auto bg-white rounded-lg shadow">
-                                <table className="min-w-full">
-                                    <thead className="bg-gray-200">
-                                        <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Serial
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Descripción
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Categoría
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Observación
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Acciones
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {componentes.map((componentes) => (
-                                            <tr key={componentes.id} className="hover:bg-gray-50">
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {componentes.serial}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {componentes.descripcion}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {componentes.categoria}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {componentes.observacion}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <Link
-                                                        href={/componentes/${componentes.id}/editar}
-                                                        className="text-yellow-600 hover:text-yellow-900 mr-2"
-                                                    >
-                                                        Editar
-                                                    </Link>
-                                                    <button
-                                                        onClick={() => handleDelete(componente.id)}
-                                                        className="text-red-600 hover:text-red-900"
-                                                        aria-label={Eliminar componentes ${componentes.serial}}
-                                                    >
-                                                        Eliminar
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+            <div>
+
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    placeholder="Buscar..."
+                    className="border p-2 rounded w-full mb-4"
+                />
+
+                <div className='flex justify-between py-2'>
+                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" href="http://localhost:8000/api/componente/pdf">Generar PDF</a>
+                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Agregar Componente
+                    </button>
+
                 </div>
+
+                <Modal2 isOpen={isModalOpen} onClose={closeModal} title={"Registrar Componente"}>
+                    <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-8 p-4 bg-white shadow-md rounded-lg">
+                        <div className="mb-4">
+                            <label htmlFor="serial" className="block text-gray-700 text-sm font-bold mb-2">
+                                Serial
+                            </label>
+                            <input
+                                type="text"
+                                id="serial"
+                                name="serial"
+                                value={data.serial}
+                                onChange={(e) => setData('serial', e.target.value)}
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Serial ? "border-red-500" : ""}`}
+                            />
+                            {errors.serial && <span>{errors.serial}</span>}
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="descripcion" className="block text-gray-700 text-sm font-bold mb-2">
+                                Descripcion
+                            </label>
+                            <input
+                                type="text"
+                                id="descripcion"
+                                name="descripcion"
+                                value={data.descripcion}
+                                onChange={(e) => setData('descripcion', e.target.value)}
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Modelo ? "border-red-500" : ""}`}
+                            />
+                            {errors.descripcion && <span>{errors.descripcion}</span>}
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="categoria" className="block text-gray-700 text-sm font-bold mb-2">
+                                Categoría
+                            </label>
+                            <select
+                                value={data.categoria}
+                                onChange={(e) => setData('categoria', e.target.value)}
+                                id="categoria"
+                                name="categoria" className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Categoria ? "border-red-500" : ""}`}
+                            >
+                                <option >Seleccione una categoria</option>
+                                <option value="Prototipo">Prototipo</option>
+                                <option value="Componente">Componente</option>
+                                <option value="Herramienta">Herramienta</option>
+                            </select>
+                            {errors.categoria && <span>{errors.categoria}</span>}
+                        </div>
+
+                        <div className="mb-6">
+                            <label htmlFor="observacion" className="block text-gray-700 text-sm font-bold mb-2">
+                                Observaciones
+                            </label>
+                            <textarea
+                                id="observacion"
+                                name="observacion"
+                                value={data.observacion}
+                                onChange={(e) => setData('observacion', e.target.value)}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24"
+                            ></textarea>
+                            {errors.observacion && <span>{errors.observacion}</span>}
+                        </div>
+
+                        <div className="flex items-center justify-end gap-4">
+
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                type="button"
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            >
+                                Cerrar
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    setTimeout(() => {
+                                        setIsModalOpen(false)
+                                    }, 2000)
+                                }}
+                                type="submit"
+                                disabled={processing}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            >
+                                {processing ? 'Guardando...' : 'Guardar'}
+                            </button>
+                        </div>
+                    </form>
+                </Modal2>
+                {/* obtenerComponentes={obtenerComponentes} */}
+                <TableComponent onDelete={eliminarComponente} data={filteredData} data2={componentes} />
             </div>
+
+
         </AuthenticatedLayout>
     );
 }

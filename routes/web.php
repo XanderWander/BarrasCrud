@@ -39,15 +39,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // rutas componentes
-    Route::get('/componentes', [ComponentesController::class, 'index'])->name('componentes.index');
-    Route::get('/componentes/crear', [ComponentesController::class, 'create'])->name('componentes.create');
+    Route::get('/componentes', [ComponentesController::class, 'index'])->name('componentes');
     Route::post('/componentes', [ComponentesController::class, 'store'])->name('componentes.store');
     Route::get('/componentes/{id}/editar', [ComponentesController::class, 'edit'])->name('componentes.edit');
     Route::put('/componentes/{id}', [ComponentesController::class, 'update'])->name('componentes.update');
     Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
     
     //Rutas de Herramientas
-    Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas.index');
+    Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
     Route::get('/herramientas/crear', [HerramientasController::class, 'create'])->name('herramientas.create');
     Route::post('/herramientas', [HerramientasController::class, 'store'])->name('herramientas.store');
     Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
@@ -55,7 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
 
     //Rutas de Prototipos
-    Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos.index');
+    Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos');
     Route::get('/prototipos/crear', [PrototiposController::class, 'create'])->name('prototipos.create');
     Route::post('/prototipos', [PrototiposController::class, 'store'])->name('prototipos.store');
     Route::get('/prototipos/{id}/editar', [PrototiposController::class, 'edit'])->name('prototipos.edit');
