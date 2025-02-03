@@ -42,13 +42,15 @@ export default function Componentes({ auth }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/componentes'), {
+        post('/componentes', {
             onSuccess: () => {
+                // Mostrar SweetAlert2 si la solicitud es exitosa
                 Swal.fire({
                     title: '¡Información enviada con éxito!',
                     icon: 'success',
                     draggable: true,
                 });
+                closeModal(); // Cerrar el modal después de guardar
             },
             onError: (errors) => {
                 // Mostrar SweetAlert2 si hay errores
@@ -59,14 +61,8 @@ export default function Componentes({ auth }) {
                     draggable: true,
                 });
             },
-        };
+        });
     };
-
-
-
-
-
-   
 
     const eliminarComponente = (id) => {
         // Mostrar un diálogo de confirmación con SweetAlert2
@@ -204,11 +200,6 @@ export default function Componentes({ auth }) {
                             </button>
 
                             <button
-                                onClick={() => {
-                                    setTimeout(() => {
-                                        setIsModalOpen(false)
-                                    }, 2000)
-                                }}
                                 type="submit"
                                 disabled={processing}
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

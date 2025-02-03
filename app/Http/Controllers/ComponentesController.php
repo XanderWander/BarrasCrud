@@ -63,19 +63,14 @@ class ComponentesController extends Controller
             'categoria' => 'required|string|max:255',
             'observacion' => 'nullable|string',
         ]);
-
+    
         $componente = Componente::findOrFail($id);
-
-        $componente->update([
-            'serial' => $request->serial,
-            'descripcion' => $request->descripcion,
-            'categoria' => $request->categoria,
-            'observacion' => $request->observacion,
-        ]);
-
+    
+        $componente->fill($request->only(['serial', 'descripcion', 'categoria', 'observacion']));
+        $componente->save();
+    
         return redirect()->route('componentes')->with('success', 'Componente actualizado correctamente.');
     }
-
     // Eliminar un componente
     public function destroy($id)
     {

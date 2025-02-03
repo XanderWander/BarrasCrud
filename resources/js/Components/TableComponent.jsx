@@ -19,8 +19,11 @@ const TableComponent = ({ data, onDelete, obtenerComponentes, data2 }) => {
     });
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Deshabilitar el botón
 
     // Validar campos
     const newErrors = {};
@@ -29,37 +32,48 @@ const TableComponent = ({ data, onDelete, obtenerComponentes, data2 }) => {
     if (!formData.categoria) newErrors.categoria = "La categoría es requerida.";
 
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+        setErrors(newErrors);
+        setIsSubmitting(false);
     } else {
-      try {
-        // Petición PUT al servidor
-        const response = await fetch(`http://localhost:8000/componentes/${selectedItem.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        try {
+            const response = await fetch(`http://localhost:8000/componentes/${selectedItem.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
 
-        if (!response.ok) {
-          throw new Error("Hubo un error al actualizar los datos.");
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (errorData.errors) {
+                    setErrors(errorData.errors);
+                } else {
+                    throw new Error("Hubo un error al actualizar los datos.");
+                }
+            } else {
+                const data = await response.json();
+                console.log("Datos actualizados correctamente:", data);
+
+                
+                Swal.fire({
+                    title: "¡Actualizado!",
+                    text: data.message, // Mensaje del backend
+                    icon: "success",
+                });
+
+               
+                setIsModalOpen(false);
+                obtenerComponentes(); 
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error al actualizar los datos.");
+        } finally {
+            setIsSubmitting(false); // Habilitar el botón
         }
-
-        const data = await response.json();
-        console.log("Datos actualizados correctamente:", data);
-
-        // Cerrar el modal después de la actualización
-        setIsModalOpen(false);
-        // obtenerComponentes();
-
-
-      } catch (error) {
-        console.error(error);
-        alert("Error al actualizar los datos.");
-      }
     }
-  };
-
+};
 
   const openEditModal = (item) => {
     setSelectedItem(item); // Establece el elemento seleccionado
@@ -236,10 +250,11 @@ const TableComponent = ({ data, onDelete, obtenerComponentes, data2 }) => {
                       Cerrar
                     </button>
                     <button
-                      type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
-                      Guardar
+                        {isSubmitting ? "Guardando..." : "Guardar"}
                     </button>
                   </div>
                 </form>
