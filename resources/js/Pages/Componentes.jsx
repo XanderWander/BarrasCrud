@@ -97,9 +97,6 @@ export default function Componentes({ auth }) {
         });
     };
 
-
-
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -152,7 +149,7 @@ export default function Componentes({ auth }) {
                                 name="descripcion"
                                 value={data.descripcion}
                                 onChange={(e) => setData('descripcion', e.target.value)}
-                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Modelo ? "border-red-500" : ""}`}
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.escripcion ? "border-red-500" : ""}`}
                             />
                             {errors.descripcion && <span>{errors.descripcion}</span>}
                         </div>
@@ -161,17 +158,14 @@ export default function Componentes({ auth }) {
                             <label htmlFor="categoria" className="block text-gray-700 text-sm font-bold mb-2">
                                 Categoría
                             </label>
-                            <select
+                            <input
+                                type="text"
+                                id="categoria"
+                                name="categoria"
                                 value={data.categoria}
                                 onChange={(e) => setData('categoria', e.target.value)}
-                                id="categoria"
-                                name="categoria" className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Categoria ? "border-red-500" : ""}`}
-                            >
-                                <option >Seleccione una categoria</option>
-                                <option value="Prototipo">Prototipo</option>
-                                <option value="Componente">Componente</option>
-                                <option value="Herramienta">Herramienta</option>
-                            </select>
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.categoria ? "border-red-500" : ""}`}
+                            />
                             {errors.categoria && <span>{errors.categoria}</span>}
                         </div>
 

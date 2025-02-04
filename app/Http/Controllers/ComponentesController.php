@@ -8,7 +8,6 @@ use App\Models\Componente;
 
 class ComponentesController extends Controller
 {
-    // Mostrar la lista de componentes
     public function index()
     {
         $componentes = Componente::all(); 
@@ -16,14 +15,12 @@ class ComponentesController extends Controller
             'componentes' => $componentes,
         ]);
     }
-
     
     public function create()
     {
         return Inertia::render('Componentes/Create');
     }
 
-    
     public function store(Request $request)
     {
         
@@ -65,13 +62,12 @@ class ComponentesController extends Controller
         ]);
     
         $componente = Componente::findOrFail($id);
-    
-        $componente->fill($request->only(['serial', 'descripcion', 'categoria', 'observacion']));
-        $componente->save();
-    
-        return redirect()->route('componentes')->with('success', 'Componente actualizado correctamente.');
+
+        $componente->update($request->all());
+
+        return response()->json(['message' => 'Componente actualizado correctamente'], 200);
     }
-    // Eliminar un componente
+    
     public function destroy($id)
     {
         $componente = Componente::findOrFail($id); 
@@ -79,4 +75,5 @@ class ComponentesController extends Controller
 
         return redirect()->route('componentes')->with('success', 'Componente eliminado correctamente.');
     }
+
 }

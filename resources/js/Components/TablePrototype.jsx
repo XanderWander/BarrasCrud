@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-const TableComponent = ({ data, onDelete, data2 }) => {
+const TablePrototype = ({ data, onDelete, data2 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
   const [formData, setFormData] = useState({
     serial: "",
-    descripcion: "",
-    categoria: "",
+    modelo: "",
+    caracteristicas: "",
     observacion: "",
   });
   const [selectedItem, setSelectedItem] = useState(null); // Estado para el elemento seleccionado
@@ -29,8 +29,9 @@ const TableComponent = ({ data, onDelete, data2 }) => {
     // Validar campos
     const newErrors = {};
     if (!formData.serial) newErrors.serial = "El serial es requerido.";
-    if (!formData.descripcion) newErrors.descripcion = "La Descripcion es requerido.";
-    if (!formData.categoria) newErrors.categoria = "La categoría es requerida.";
+    if (!formData.modelo) newErrors.modelo = "El modelo es requerido.";
+    if (!formData.caracteristicas) newErrors.caracteristicas = "Las Caracteristicas son requerida.";
+    if (!formData.observacion) newErrors.observacion = "La Observacion es requerida.";
 
     if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
@@ -38,7 +39,7 @@ const TableComponent = ({ data, onDelete, data2 }) => {
     } else {
         try {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const response = await fetch(`http://localhost:8000/componentes/${selectedItem.id}`, {
+            const response = await fetch(`http://localhost:8000/prototipos/${selectedItem.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,8 +83,8 @@ const TableComponent = ({ data, onDelete, data2 }) => {
     setSelectedItem(item); // Establece el elemento seleccionado
     setFormData({
       serial: item.serial || "",
-      descripcion: item.descripcion || "",
-      categoria: item.categoria || "",
+      modelo: item.modelo || "",
+      caracteristicas: item.caracteristicas || "",
       observacion: item.observacion || "",
     });
     setIsModalOpen(true); // Abre el modal
@@ -97,8 +98,8 @@ const TableComponent = ({ data, onDelete, data2 }) => {
           <tr className="bg-gray-100">
             <th className="border border-gray-300 px-4 py-2">ID</th>
             <th className="border border-gray-300 px-4 py-2">Serial</th>
+            <th className="border border-gray-300 px-4 py-2">Modelo</th>
             <th className="border border-gray-300 px-4 py-2">Caracteristicas</th>
-            <th className="border border-gray-300 px-4 py-2">Categoria</th>
             <th className="border border-gray-300 px-4 py-2">Observaciones</th>
             <th className="border border-gray-300 px-4 py-2">Acciones</th>
           </tr>
@@ -111,8 +112,8 @@ const TableComponent = ({ data, onDelete, data2 }) => {
               <tr key={index} className="hover:bg-gray-200 text-center">
                 <td className="border border-gray-300 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.serial}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.categoria}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.modelo}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.caracteristicas}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observacion}</td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
@@ -135,8 +136,8 @@ const TableComponent = ({ data, onDelete, data2 }) => {
               <tr key={index} className="hover:bg-gray-200 text-center">
                 <td className="border border-gray-300 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.serial}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.categoria}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.modelo}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.caracteristicas}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button
@@ -186,41 +187,41 @@ const TableComponent = ({ data, onDelete, data2 }) => {
                     )}
 
                     <label
-                      htmlFor="Descripcion"
+                      htmlFor="Modelo"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Descripcion
+                      Modelo
                     </label>
                     <input
                       type="text"
-                      id="descripcion"
-                      name="descripcion"
-                      value={formData.descripcion}
+                      id="modelo"
+                      name="modelo"
+                      value={formData.modelo}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 border rounded focus:outline-none ${errors.descripcion ? "border-red-500" : ""
+                      className={`w-full px-3 py-2 border rounded focus:outline-none ${errors.modelo ? "border-red-500" : ""
                         }`}
                     />
-                    {errors.descripcion && (
-                      <p className="text-red-500 text-xs mt-1">{errors.descripcion}</p>
+                    {errors.modelo && (
+                      <p className="text-red-500 text-xs mt-1">{errors.modelo}</p>
                     )}
 
                     <label
-                      htmlFor="categoria"
+                      htmlFor="Caracteristicas"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Categoria
+                      Caracteristicas
                     </label>
                     <input
                       type="text"
-                      id="categoria"
-                      name="categoria"
-                      value={formData.categoria}
+                      id="caracteristicas"
+                      name="caracteristicas"
+                      value={formData.caracteristicas}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 border rounded focus:outline-none ${errors.categoria ? "border-red-500" : ""
+                      className={`w-full px-3 py-2 border rounded focus:outline-none ${errors.caracteristicas ? "border-red-500" : ""
                         }`}
                     />
-                    {errors.categoria && (
-                      <p className="text-red-500 text-xs mt-1">{errors.categoria}</p>
+                    {errors.caracteristicas && (
+                      <p className="text-red-500 text-xs mt-1">{errors.caracteristicas}</p>
                     )}
 
                     <label
@@ -271,4 +272,4 @@ const TableComponent = ({ data, onDelete, data2 }) => {
   );
 };
 
-export default TableComponent;
+export default TablePrototype;
