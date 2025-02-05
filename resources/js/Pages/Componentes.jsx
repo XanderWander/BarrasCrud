@@ -134,7 +134,7 @@ export default function Componentes({ auth }) {
                                 name="serial"
                                 value={data.serial}
                                 onChange={(e) => setData('serial', e.target.value)}
-                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.Serial ? "border-red-500" : ""}`}
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.serial ? "border-red-500" : ""}`}
                             />
                             {errors.serial && <span>{errors.serial}</span>}
                         </div>
@@ -149,7 +149,7 @@ export default function Componentes({ auth }) {
                                 name="descripcion"
                                 value={data.descripcion}
                                 onChange={(e) => setData('descripcion', e.target.value)}
-                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.escripcion ? "border-red-500" : ""}`}
+                                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.descripcion ? "border-red-500" : ""}`}
                             />
                             {errors.descripcion && <span>{errors.descripcion}</span>}
                         </div>

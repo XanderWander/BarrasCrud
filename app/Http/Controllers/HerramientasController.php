@@ -37,7 +37,7 @@ class HerramientasController extends Controller
             'observaciones'=> $request->observaciones,
         ]);
 
-        return redirect()->route('herramientas.index')->with('success', 'Herramienta agregada correctamente.');
+        return redirect()->route('herramientas')->with('success', 'Herramienta agregada correctamente.');
     }
 
     public function edit($id)
@@ -58,13 +58,9 @@ class HerramientasController extends Controller
         ]);
 
         $herramienta = Herramienta::findOrFail($id);
-        $herramienta->update([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'observaciones'=> $request->observaciones,
-        ]);
-
-        return redirect()->route('herramientas.index')->with('success', 'Herramienta actualizada correctamente.');
+        $herramienta->update($request->all());
+        
+        return response()->json(['message' => 'Componente actualizado correctamente'], 200);
     }
    
     public function destroy($id)
@@ -72,6 +68,6 @@ class HerramientasController extends Controller
         $herramienta = Herramienta::findOrFail($id); 
         $herramienta->delete();
 
-        return redirect()->route('herramientas.index')->with('success', 'Herramienta eliminada correctamente.');
+        return redirect()->route('herramientas')->with('success', 'Herramienta eliminada correctamente.');
     }
 }

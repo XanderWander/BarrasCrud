@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\CodigoBarraController;
 use App\Http\Controllers\ComponentesController;
 use App\Http\Controllers\HerramientasController;
 use App\Http\Controllers\ProfileController;
@@ -45,13 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/componentes/{id}', [ComponentesController::class, 'update'])->name('componentes.update');
     Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
     
-    //Rutas de Herramientas
-    Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
-    Route::get('/herramientas/crear', [HerramientasController::class, 'create'])->name('herramientas.create');
-    Route::post('/herramientas', [HerramientasController::class, 'store'])->name('herramientas.store');
-    Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
-    Route::put('/herramientas/{id}', [HerramientasController::class, 'update'])->name('herramientas.update');
-    Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
 
     //Rutas de Prototipos
     Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos');
@@ -61,7 +55,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/prototipos/{id}', [PrototiposController::class, 'update'])->name('prototipos.update');
     Route::delete('/prototipos/{id}', [PrototiposController::class, 'destroy'])->name('prototipos.destroy');
 
+    //Rutas de Herramientas
+    Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
+    Route::get('/herramientas/crear', [HerramientasController::class, 'create'])->name('herramientas.create');
+    Route::post('/herramientas', [HerramientasController::class, 'store'])->name('herramientas.store');
+    Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
+    Route::put('/herramientas/{id}', [HerramientasController::class, 'update'])->name('herramientas.update');
+    Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
+
     Route::get('/barcode', [BarcodeController::class, "index"])->name('barcode');
+    Route::get('/generar-codigo-barras/{serial}', [CodigoBarraController::class, 'generarPDF'])->name('codigo.barras.pdf');
 
 
 });
