@@ -30,9 +30,25 @@ Route::get('/', function () {
     ]);
 });
 
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::inertia('/dashboard', 'Dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::inertia('/dashboard', 'Dashboard');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// routes/api.php o web.php
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return "Panel de administrador";
+    });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -65,8 +81,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/barcode', [BarcodeController::class, "index"])->name('barcode');
     Route::get('/generar-codigo-barras/{serial}', [CodigoBarraController::class, 'generarPDF'])->name('codigo.barras.pdf');
-
-
 });
 
 require __DIR__ . '/auth.php';
