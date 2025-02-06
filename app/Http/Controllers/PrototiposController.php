@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Prototipo; 
@@ -74,5 +75,16 @@ class PrototiposController extends Controller
         $prototipo->delete(); 
 
         return redirect()->route('prototipos')->with('success', 'Prototipo eliminado correctamente.');
+    }
+
+    public function generarPDF()
+    {
+        $prototipos = Prototipo::all();
+
+        // Generar el PDF usando una vista Blade
+        $pdf = Pdf::loadView('reportes-prototipos', compact('prototipos'));
+
+        // Descargar el PDF
+        return $pdf->stream('reporte_prototipo.pdf'); // Cambiar a do
     }
 }

@@ -91,7 +91,6 @@ const TableComponent = ({ data, onDelete, data2 }) => {
 
   return (
     <div className="overflow-x-auto">
-      {/* <GeneratePDF  data={data} /> */}
       <table className="table-auto border-collapse border border-gray-400 w-full">
         <thead>
           <tr className="bg-gray-100">

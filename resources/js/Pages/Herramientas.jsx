@@ -114,7 +114,7 @@ export default function Herramientas({ auth }) {
                 />
 
                 <div className='flex justify-between py-2'>
-                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" href="http://localhost:8000/api/componente/pdf">Generar PDF</a>
+                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" href="http://localhost:8000/herramientas/pdf">Generar PDF</a>
                     <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Agregar Herramienta
                     </button>

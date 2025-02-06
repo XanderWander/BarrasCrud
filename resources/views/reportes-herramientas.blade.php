@@ -39,11 +39,11 @@
         <tbody>
             @foreach ($herramientas as $herramienta)
                 <tr>
-                    <td>{{ $herramienta->Nombre }}</td>
+                    <td>{{ $herramienta->nombre }}</td>
                     
-                    <td>{{ $herramienta->Categoria }}</td>
+                    <td>{{ $herramienta->descripcion }}</td>
                     {{-- <td>{{ $herramienta->Descripcion }}</td> --}}
-                    <td>{{ $herramienta->Observacion }}</td>
+                    <td>{{ $herramienta->observaciones }}</td>
                 </tr>
             @endforeach
         </tbody>

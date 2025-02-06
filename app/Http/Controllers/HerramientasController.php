@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Herramienta;
@@ -69,5 +70,16 @@ class HerramientasController extends Controller
         $herramienta->delete();
 
         return redirect()->route('herramientas')->with('success', 'Herramienta eliminada correctamente.');
+    }
+
+    public function generarPDF()
+    {
+        $herramientas = Herramienta::all();
+
+        // Generar el PDF usando una vista Blade
+        $pdf = Pdf::loadView('reportes-herramientas', compact('herramientas'));
+
+        // Descargar el PDF
+        return $pdf->stream('reporte_herramienta.pdf'); // Cambiar a do
     }
 }

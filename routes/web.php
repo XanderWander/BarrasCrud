@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/componentes/{id}/editar', [ComponentesController::class, 'edit'])->name('componentes.edit');
     Route::put('/componentes/{id}', [ComponentesController::class, 'update'])->name('componentes.update');
     Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
-    
+    Route::get('/componente/pdf', [ComponentesController::class, 'generarPDF'])->name('componentes.pdf');
 
     //Rutas de Prototipos
     Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos');
@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/prototipos/{id}/editar', [PrototiposController::class, 'edit'])->name('prototipos.edit');
     Route::put('/prototipos/{id}', [PrototiposController::class, 'update'])->name('prototipos.update');
     Route::delete('/prototipos/{id}', [PrototiposController::class, 'destroy'])->name('prototipos.destroy');
+    Route::get('/prototipos/pdf', [PrototiposController::class, 'generarPDF'])->name('prototipos.pdf');
 
     //Rutas de Herramientas
     Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
@@ -62,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
     Route::put('/herramientas/{id}', [HerramientasController::class, 'update'])->name('herramientas.update');
     Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
+    Route::get('/herramientas/pdf', [HerramientasController::class, 'generarPDF'])->name('herramientas.pdf');
 
     Route::get('/barcode', [BarcodeController::class, "index"])->name('barcode');
     Route::get('/generar-codigo-barras/{serial}', [CodigoBarraController::class, 'generarPDF'])->name('codigo.barras.pdf');

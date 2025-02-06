@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Reporte de Prototipos</h1>
+    <h1 style="text-align: center;">Reporte de Componentes</h1>
     <table>
         <thead>
             <tr>
@@ -38,11 +38,11 @@
         <tbody>
             @foreach ($componentes as $componente)
                 <tr>
-                    <td>{{ $componente->Serial }}</td>
+                    <td>{{ $componente->serial }}</td>
                     
-                    <td>{{ $componente->Categoria }}</td>
-                    <td>{{ $componente->Descripcion }}</td>
-                    <td>{{ $componente->Observaciones }}</td>
+                    <td>{{ $componente->categoria }}</td>
+                    <td>{{ $componente->descripcion }}</td>
+                    <td>{{ $componente->observacion }}</td>
                 </tr>
             @endforeach
         </tbody>

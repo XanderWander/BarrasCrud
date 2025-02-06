@@ -30,19 +30,17 @@
             <tr>
                 <th>Serial</th>
                 <th>Modelo</th>
-                <th>Categoría</th>
                 <th>Características</th>
-                <th>Observaciones</th>
+                <th>Observación</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($prototipos as $prototipo)
                 <tr>
-                    <td>{{ $prototipo->Serial }}</td>
-                    <td>{{ $prototipo->Modelo }}</td>
-                    <td>{{ $prototipo->Categoria }}</td>
-                    <td>{{ $prototipo->Caracteristicas }}</td>
-                    <td>{{ $prototipo->Observaciones }}</td>
+                    <td>{{ $prototipo->serial }}</td>
+                    <td>{{ $prototipo->modelo }}</td>
+                    <td>{{ $prototipo->caracteristicas }}</td>
+                    <td>{{ $prototipo->observacion }}</td>
                 </tr>
             @endforeach
         </tbody>

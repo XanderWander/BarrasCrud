@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Componente; 
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class ComponentesController extends Controller
 {
     public function index()
@@ -74,6 +74,17 @@ class ComponentesController extends Controller
         $componente->delete(); 
 
         return redirect()->route('componentes')->with('success', 'Componente eliminado correctamente.');
+    }
+
+    public function generarPDF()
+    {
+        $componentes = Componente::all();
+
+        // Generar el PDF usando una vista Blade
+        $pdf = Pdf::loadView('reportes-componentes', compact('componentes'));
+
+        // Descargar el PDF
+        return $pdf->stream('reporte_componente.pdf'); // Cambiar a do
     }
 
 }
