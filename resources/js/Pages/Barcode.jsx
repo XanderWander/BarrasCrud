@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, router } from '@inertiajs/react';
+import axios from 'axios';
 
 export default function BarCode({ auth, prototipos, componentes }) {
     const [selectedTable, setSelectedTable] = useState('prototipo'); // Estado para la tabla seleccionada
@@ -13,14 +14,30 @@ export default function BarCode({ auth, prototipos, componentes }) {
             return;
         }
     
-        setIsGenerating();
-        
-        router.visit(`/generar-codigo-barras/${selectedSerial}`, {
-            method: 'get',
-            preserveState: true,
-            onError: (errors) => {
-                alert('Error al generar el PDF. Por favor, intenta nuevamente.');
-            },
+        setIsGenerating(true);
+    
+        // Hacer la solicitud con axios
+        axios({
+            url: `/generar-codigo-barras/${selectedSerial}`,
+            method: 'GET',
+            responseType: 'blob', // Importante para manejar archivos binarios
+        })
+        .then((response) => {
+            // Crear un enlace temporal para descargar el archivo
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'codigo-barras.pdf'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link); // Limpiar el enlace
+        })
+        .catch((error) => {
+            console.error('Error al descargar el PDF:', error);
+            alert('Error al generar el PDF. Por favor, intenta nuevamente.');
+        })
+        .finally(() => {
+            setIsGenerating(false);
         });
     };
 

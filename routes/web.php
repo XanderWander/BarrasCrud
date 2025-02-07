@@ -70,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
     Route::get('/herramientas/pdf', [HerramientasController::class, 'generarPDF'])->name('herramientas.pdf');
 
-    Route::get('/barcodes', [BarcodeController::class, 'index']);
+    Route::get('/barcodes', [BarcodeController::class, 'index'])->name('barcodes');
     Route::get('/generar-codigo-barras/{serial}', [BarcodeController::class, 'generarPDF'])->name('barcode.pdf');
 });
 
