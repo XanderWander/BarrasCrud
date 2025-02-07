@@ -111,12 +111,12 @@ export default function Prototipos({ auth }) {
                     value={searchTerm}
                     onChange={handleSearch}
                     placeholder="Buscar..."
-                    className="border p-2 rounded w-50 mb-4"
+                    className="border p-2 mx-5 mt-4 rounded w-45 mb-4"
                 />
 
                 <div className='flex justify-between py-2'>
-                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" href="http://localhost:8000/componente/pdf">Generar PDF</a>
-                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-5 py-2 px-4 rounded" target="_blank" href="http://localhost:8000/componente/pdf">Generar PDF</a>
+                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 mx-5 text-white font-bold py-2 px-4 rounded">
                         Agregar Prototipo
                     </button>
 

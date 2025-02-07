@@ -46,6 +46,7 @@ class ComponentesController extends Controller
    
     public function edit($id)
     {
+        $this->authorize('update', $componente);
         $componente = Componente::findOrFail($id); 
         return Inertia::render('Componentes/Edit', [
             'componente' => $componente,
@@ -54,6 +55,7 @@ class ComponentesController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorize('update', $componente);
         $request->validate([
             'serial' => 'required|string|max:255|unique:componentes,serial,' . $id,
             'descripcion' => 'required|string',
@@ -70,6 +72,7 @@ class ComponentesController extends Controller
     
     public function destroy($id)
     {
+        $this->authorize('update', $componente);
         $componente = Componente::findOrFail($id); 
         $componente->delete(); 
 

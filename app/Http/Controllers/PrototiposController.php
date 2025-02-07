@@ -44,6 +44,7 @@ class PrototiposController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('update', $prototipo);
         $prototipo = Prototipo::findOrFail($id); // Buscar el prototipo por ID
         return Inertia::render('Prototipos/Edit', [
             'prototipo' => $prototipo,
@@ -53,7 +54,8 @@ class PrototiposController extends Controller
     // Actualizar un prototipo existente
     public function update(Request $request, $id)
     {
-        // Validar los datos del formulario
+        $this->authorize('update', $prototipo);
+
         $request->validate([
             'serial' => 'required|string|max:255|unique:prototipos,serial,' . $id,
             'modelo' => 'required|string|max:255',
@@ -71,6 +73,8 @@ class PrototiposController extends Controller
     // Eliminar un prototipo
     public function destroy($id)
     {
+        $this->authorize('delete', $prototipo);
+        
         $prototipo = Prototipo::findOrFail($id); 
         $prototipo->delete(); 
 

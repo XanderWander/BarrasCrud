@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { usePage } from "@inertiajs/react";
 
 const TableTools = ({ data, onDelete, data2 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
+  const { auth } = usePage().props;
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -97,7 +99,7 @@ const TableTools = ({ data, onDelete, data2 }) => {
             <th className="border border-gray-300 px-4 py-2">Nombre</th>
             <th className="border border-gray-300 px-4 py-2">Descripcion</th>
             <th className="border border-gray-300 px-4 py-2">Observaciones</th>
-            <th className="border border-gray-300 px-4 py-2">Acciones</th>
+            {auth.user.role === 'admin' && <th className="border border-gray-300 px-4 py-2">Acciones</th>}
           </tr>
         </thead>
         <tbody>
@@ -111,18 +113,22 @@ const TableTools = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                { auth.user.role === 'admin' && (
+                    <>
+                       <button
+                     onClick={() => openEditModal(item)}
+                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                   >
+                     Editar
+                   </button>
+                   <button
+                     onClick={() => onDelete(item.id)}
+                     className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                   >
+                     Eliminar
+                   </button>
+                    </>
+                )};
                 </td>
               </tr>
             ))
@@ -134,18 +140,22 @@ const TableTools = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                { auth.user.role === 'admin' && (
+                    <>
+                       <button
+                     onClick={() => openEditModal(item)}
+                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                   >
+                     Editar
+                   </button>
+                   <button
+                     onClick={() => onDelete(item.id)}
+                     className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                   >
+                     Eliminar
+                   </button>
+                    </>
+                )};
                 </td>
               </tr>
             ))

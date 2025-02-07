@@ -47,31 +47,40 @@ Route::middleware(['auth'])->group(function () {
     // Rutas de Componentes
     Route::get('/componentes', [ComponentesController::class, 'index'])->name('componentes');
     Route::post('/componentes', [ComponentesController::class, 'store'])->name('componentes.store');
-    Route::get('/componentes/{id}/editar', [ComponentesController::class, 'edit'])->name('componentes.edit');
-    Route::put('/componentes/{id}', [ComponentesController::class, 'update'])->name('componentes.update');
-    Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
     Route::get('/componente/pdf', [ComponentesController::class, 'generarPDF'])->name('componentes.pdf');
 
     // Rutas de Prototipos
     Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos');
     Route::get('/prototipos/crear', [PrototiposController::class, 'create'])->name('prototipos.create');
     Route::post('/prototipos', [PrototiposController::class, 'store'])->name('prototipos.store');
-    Route::get('/prototipos/{id}/editar', [PrototiposController::class, 'edit'])->name('prototipos.edit');
-    Route::put('/prototipos/{id}', [PrototiposController::class, 'update'])->name('prototipos.update');
-    Route::delete('/prototipos/{id}', [PrototiposController::class, 'destroy'])->name('prototipos.destroy');
     Route::get('/prototipos/pdf', [PrototiposController::class, 'generarPDF'])->name('prototipos.pdf');
 
     // Rutas de Herramientas
     Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
     Route::get('/herramientas/crear', [HerramientasController::class, 'create'])->name('herramientas.create');
     Route::post('/herramientas', [HerramientasController::class, 'store'])->name('herramientas.store');
-    Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
-    Route::put('/herramientas/{id}', [HerramientasController::class, 'update'])->name('herramientas.update');
-    Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
     Route::get('/herramientas/pdf', [HerramientasController::class, 'generarPDF'])->name('herramientas.pdf');
 
     Route::get('/barcodes', [BarcodeController::class, 'index'])->name('barcodes');
     Route::get('/generar-codigo-barras/{serial}', [BarcodeController::class, 'generarPDF'])->name('barcode.pdf');
+});
+
+Route::middleware(['auth','role:admin'])->group(function () {
+        Route::get('/componentes/{id}/editar', [ComponentesController::class, 'edit'])->name('componentes.edit');
+        Route::put('/componentes/{id}', [ComponentesController::class, 'update'])->name('componentes.update');
+        Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/prototipos/{id}/editar', [PrototiposController::class, 'edit'])->name('prototipos.edit');
+    Route::put('/prototipos/{id}', [PrototiposController::class, 'update'])->name('prototipos.update');
+    Route::delete('/prototipos/{id}', [PrototiposController::class, 'destroy'])->name('prototipos.destroy');
+});
+    
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/herramientas/{id}/editar', [HerramientasController::class, 'edit'])->name('herramientas.edit');
+    Route::put('/herramientas/{id}', [HerramientasController::class, 'update'])->name('herramientas.update');
+    Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
 });
 
 require __DIR__ . '/auth.php';

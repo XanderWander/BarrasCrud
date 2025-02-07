@@ -43,6 +43,7 @@ class HerramientasController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('update', $herramienta);
         $herramienta = Herramienta::findOrFail($id);
         return Inertia::render('Herramientas/Edit', [
             'herramienta' => $herramienta, 
@@ -51,7 +52,7 @@ class HerramientasController extends Controller
 
     public function update(Request $request, $id)
     {
-        
+        $this->authorize('update', $herramienta);
         $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
@@ -66,6 +67,7 @@ class HerramientasController extends Controller
    
     public function destroy($id)
     {
+        $this->authorize('update', $herramienta);
         $herramienta = Herramienta::findOrFail($id); 
         $herramienta->delete();
 
