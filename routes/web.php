@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\administrador;
+use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\CodigoBarraController;
 use App\Http\Controllers\ComponentesController;
@@ -34,12 +36,15 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware([administrador::class])->group(function () {
+    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-    // rutas componentes
+Route::middleware(['auth'])->group(function () {
+    // Rutas de Componentes
     Route::get('/componentes', [ComponentesController::class, 'index'])->name('componentes');
     Route::post('/componentes', [ComponentesController::class, 'store'])->name('componentes.store');
     Route::get('/componentes/{id}/editar', [ComponentesController::class, 'edit'])->name('componentes.edit');
@@ -47,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/componentes/{id}', [ComponentesController::class, 'destroy'])->name('componentes.destroy');
     Route::get('/componente/pdf', [ComponentesController::class, 'generarPDF'])->name('componentes.pdf');
 
-    //Rutas de Prototipos
+    // Rutas de Prototipos
     Route::get('/prototipos', [PrototiposController::class, 'index'])->name('prototipos');
     Route::get('/prototipos/crear', [PrototiposController::class, 'create'])->name('prototipos.create');
     Route::post('/prototipos', [PrototiposController::class, 'store'])->name('prototipos.store');
@@ -56,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/prototipos/{id}', [PrototiposController::class, 'destroy'])->name('prototipos.destroy');
     Route::get('/prototipos/pdf', [PrototiposController::class, 'generarPDF'])->name('prototipos.pdf');
 
-    //Rutas de Herramientas
+    // Rutas de Herramientas
     Route::get('/herramientas', [HerramientasController::class, 'index'])->name('herramientas');
     Route::get('/herramientas/crear', [HerramientasController::class, 'create'])->name('herramientas.create');
     Route::post('/herramientas', [HerramientasController::class, 'store'])->name('herramientas.store');
@@ -65,10 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/herramientas/{id}', [HerramientasController::class, 'destroy'])->name('herramientas.destroy');
     Route::get('/herramientas/pdf', [HerramientasController::class, 'generarPDF'])->name('herramientas.pdf');
 
-    Route::get('/barcode', [BarcodeController::class, "index"])->name('barcode');
-    Route::get('/generar-codigo-barras/{serial}', [CodigoBarraController::class, 'generarPDF'])->name('codigo.barras.pdf');
-
-
+    Route::get('/barcodes', [BarcodeController::class, 'index']);
+    Route::get('/generar-codigo-barras/{serial}', [BarcodeController::class, 'generarPDF'])->name('barcode.pdf');
 });
 
 require __DIR__ . '/auth.php';

@@ -5,18 +5,22 @@ import { Head, useForm, router } from '@inertiajs/react';
 export default function BarCode({ auth, prototipos, componentes }) {
     const [selectedTable, setSelectedTable] = useState('prototipo'); // Estado para la tabla seleccionada
     const [selectedSerial, setSelectedSerial] = useState(''); // Estado para el serial seleccionado
-
+    const [isGenerating, setIsGenerating] = useState(false);
     // Función para manejar la generación del PDF
     const handleGeneratePDF = () => {
         if (!selectedSerial) {
             alert('Por favor, selecciona un serial.');
             return;
         }
-
-        // Redirigir a la ruta que genera el PDF
+    
+        setIsGenerating();
+        
         router.visit(`/generar-codigo-barras/${selectedSerial}`, {
             method: 'get',
             preserveState: true,
+            onError: (errors) => {
+                alert('Error al generar el PDF. Por favor, intenta nuevamente.');
+            },
         });
     };
 
@@ -78,9 +82,10 @@ export default function BarCode({ auth, prototipos, componentes }) {
                         {/* Botón para generar el PDF */}
                         <button
                             onClick={handleGeneratePDF}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            disabled={isGenerating}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
                         >
-                            Generar Código de Barras en PDF
+                            {isGenerating ? 'Generando PDF...' : 'Generar Código de Barras en PDF'}
                         </button>
                     </div>
                 </div>
