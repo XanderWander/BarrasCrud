@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-const TableTools = ({ data, onDelete, data2 }) => {
+const TableTools = ({ data, onDelete, data2 , user}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
   const [formData, setFormData] = useState({
     nombre: "",
@@ -111,18 +111,24 @@ const TableTools = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                {user.user_rol === '2' ? (
+                  <>
+                    <button
+                      onClick={() => openEditModal(item)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-500">Sin permisos</span>
+                )}
                 </td>
               </tr>
             ))
@@ -134,18 +140,24 @@ const TableTools = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.descripcion}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                {user.user_rol === '2' ? (
+                  <>
+                    <button
+                      onClick={() => openEditModal(item)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-500">Sin permisos</span>
+                )}
                 </td>
               </tr>
             ))

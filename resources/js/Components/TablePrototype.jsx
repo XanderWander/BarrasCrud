@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import Select from "react-select"; // Importar react-selec
 
-const TablePrototype = ({ data, onDelete, data2 }) => {
+const TablePrototype = ({ data, onDelete, data2 , user, componentes}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
+  const [selectedCaracteristicas, setSelectedCaracteristicas] = useState([]);
   const [formData, setFormData] = useState({
     serial: "",
     modelo: "",
@@ -11,6 +13,19 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
   });
   const [selectedItem, setSelectedItem] = useState(null); // Estado para el elemento seleccionado
   const [errors, setErrors] = useState({});
+
+  //setSelectedCaracteristicas(selectedCaracteristicas.split('::').map(c => ({ value: c, label: c })));
+
+  useEffect(() => {
+    console.log('form', formData);
+    setFormData({
+      ...formData,
+      ['caracteristicas']: selectedCaracteristicas.map(c => c.value).join('::'),
+    });
+          //setFormData('caracteristicas', selectedCaracteristicas.map(c => c.value).join('::'));
+          console.log('Caracteristicas', selectedCaracteristicas.map(c => c.value).join('::'));
+          console.log('form', formData);
+      }, [selectedCaracteristicas]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +40,7 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true); // Deshabilitar el botón
-
+    console.log('Form Data', formData)
     // Validar campos
     const newErrors = {};
     if (!formData.serial) newErrors.serial = "El serial es requerido.";
@@ -81,10 +96,13 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
 
   const openEditModal = (item) => {
     setSelectedItem(item); // Establece el elemento seleccionado
+    if(item.caracteristicas !== undefined && item.caracteristicas !== null && item.caracteristicas.length > 0)
+      setSelectedCaracteristicas(item.caracteristicas.split('::').map(c => ({ value: c, label: c })));
+
     setFormData({
       serial: item.serial || "",
       modelo: item.modelo || "",
-      caracteristicas: item.caracteristicas || "",
+      caracteristicas: selectedCaracteristicas.map(c => c.value).join(',') || "",
       observacion: item.observacion || "",
     });
     setIsModalOpen(true); // Abre el modal
@@ -113,21 +131,27 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.serial}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.modelo}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.caracteristicas}</td>
+                <td className="border border-gray-300 px-4 py-2">{( (item.caracteristicas === null? '' : item.caracteristicas ) ).replace('::', ', ')}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observacion}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                {user.user_rol === '2' ? (
+                  <>
+                    <button
+                      onClick={() => openEditModal(item)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-500">Sin permisos</span>
+                )}
                 </td>
               </tr>
             ))
@@ -137,29 +161,36 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
                 <td className="border border-gray-300 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.serial}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.modelo}</td>
-                <td className="border border-gray-300 px-4 py-2">{item.caracteristicas}</td>
+                <td className="border border-gray-300 px-4 py-2">{( (item.caracteristicas === null? '' : item.caracteristicas ) ).replace('::', ', ')}</td>
                 <td className="border border-gray-300 px-4 py-2">{item.observaciones}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
-                  >
-                    Eliminar
-                  </button>
+                {user.user_rol === '2' ? (
+                  <>
+                    <button
+                      onClick={() => openEditModal(item)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-700"
+                    >
+                      Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-gray-500">Sin permisos</span>
+                )}
                 </td>
               </tr>
             ))
           )}
+        </tbody>
+      </table>
 
-
-          {/* Modal */}
-          {isModalOpen && (
+      {/* Modal */}
+      {isModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
               <div className="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg">
                 <h2 className="text-lg font-bold mb-4">Editar Datos</h2>
@@ -211,6 +242,7 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
                     >
                       Caracteristicas
                     </label>
+                    {/*}
                     <input
                       type="text"
                       id="caracteristicas"
@@ -219,11 +251,24 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
                       onChange={handleChange}
                       className={`w-full px-3 py-2 border rounded focus:outline-none ${errors.caracteristicas ? "border-red-500" : ""
                         }`}
-                    />
+                    />*/}
                     {errors.caracteristicas && (
                       <p className="text-red-500 text-xs mt-1">{errors.caracteristicas}</p>
                     )}
 
+                      <Select
+                          isMulti
+                          type="text"
+                          id="caracteristicas"
+                          name="caracteristicas"
+                          value={selectedCaracteristicas}                    
+                          onChange={setSelectedCaracteristicas}
+                          options={componentes.map(item => ({
+                              value: `${item.categoria} - ${item.descripcion}`,
+                              label: `${item.categoria} - ${item.descripcion}`,
+                          }))}
+                          className="mt-1"
+                      />
                     <label
                       htmlFor="observacion"
                       className="block text-gray-700 text-sm font-bold mb-2"
@@ -266,8 +311,7 @@ const TablePrototype = ({ data, onDelete, data2 }) => {
               </div>
             </div>
           )}
-        </tbody>
-      </table>
+
     </div>
   );
 };

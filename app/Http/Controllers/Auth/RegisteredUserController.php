@@ -36,12 +36,22 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        /****
+         * ROL: 1 ADMIN
+         * ROL: 2 USER
+         */
+        $rolToUse = '1';
+        $existingAdmin = User::where('user_rol', 2)->exists();
 
+        $rolToUse = $existingAdmin ? '1' : '2';
+
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            ])->assignRole('admin');
+            'user_rol' => $rolToUse,
+        ]);
 
         event(new Registered($user));
 

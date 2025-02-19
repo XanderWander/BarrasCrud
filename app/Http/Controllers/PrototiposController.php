@@ -6,6 +6,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Prototipo; 
+use App\Models\Componente; 
 
 class PrototiposController extends Controller
 {
@@ -13,8 +14,10 @@ class PrototiposController extends Controller
     public function index()
     {
         $prototipos = Prototipo::all(); 
+        $componentes = Componente::all(); 
         return Inertia::render('Prototipos', [
             'prototipos' => $prototipos,
+            'componentes' => $componentes,
         ]);
     }
 

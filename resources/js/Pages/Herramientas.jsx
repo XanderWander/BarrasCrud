@@ -48,8 +48,10 @@ export default function Herramientas({ auth }) {
                     title: '¡Información enviada con éxito!',
                     icon: 'success',
                     draggable: true,
-                });
-                closeModal(); // Cerrar el modal después de guardar
+                }).then(() => {
+                    closeModal(); 
+                    window.location.reload(); 
+                });// Cerrar el modal después de guardar
             },
             onError: (errors) => {
                 // Mostrar SweetAlert2 si hay errores
@@ -82,6 +84,9 @@ export default function Herramientas({ auth }) {
                             title: '¡Eliminado!',
                             text: 'El componente ha sido eliminado.',
                             icon: 'success',
+                        }).then(() => {
+                            closeModal(); 
+                            window.location.reload(); 
                         });
                     },
                     onError: () => {
@@ -188,7 +193,7 @@ export default function Herramientas({ auth }) {
                     </form>
                 </Modal2>
                 {/* obtenerComponentes={obtenerComponentes} */}
-                <TableTools onDelete={eliminarComponente} data={filteredData} data2={herramientas} />
+                <TableTools onDelete={eliminarComponente} data={filteredData} data2={herramientas} user={auth.user} />
             </div>
 
 

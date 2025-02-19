@@ -1,25 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import Modal2 from '@/Components/Modal2';
 import Swal from 'sweetalert2';
 import { router } from '@inertiajs/react'
 import TablePrototype from '@/Components/TablePrototype';
+import Select from "react-select"; // Importar react-selec
 
-export default function Prototipos({ auth }) {
+export default function Prototipos({ auth}) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchTerm, setSearchTerm] = useState("");
-    const { prototipos } = usePage().props;
+    const { prototipos} = usePage().props;
+    const { componentes } = usePage().props;
+    const [selectedCaracteristicas, setSelectedCaracteristicas] = useState([]);
     const [filteredData, setFilteredData] = useState(prototipos);
     const { data, setData, post, processing, errors } = useForm({
         serial: '',
         modelo: '',
-        caracteristicas: '',
+        caracteristicas: [''],
         observacion: '',
     });
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
+
+    useEffect(() => {
+        setData('caracteristicas', selectedCaracteristicas.map(c => c.value).join('::'));
+    }, [selectedCaracteristicas]);
 
     const handleSearch = (e) => {
         const term = e.target.value.toLowerCase();
@@ -53,6 +60,7 @@ export default function Prototipos({ auth }) {
                 });
             },
             onError: (errors) => {
+                console.log(errors)
                 // Mostrar SweetAlert2 si hay errores
                 Swal.fire({
                     title: 'Error',
@@ -158,14 +166,28 @@ export default function Prototipos({ auth }) {
                             <label htmlFor="caracteristicas" className="block text-gray-700 text-sm font-bold mb-2">
                                 Caracteristicas
                             </label>
-                            <input
+                            <Select
+                                    isMulti
+                                    type="text"
+                                    id="caracteristicas"
+                                    name="caracteristicas"
+                                    value={selectedCaracteristicas}
+                                    onChange={setSelectedCaracteristicas}
+                                    options={componentes.map(item => ({
+                                        value: `${item.categoria} - ${item.descripcion}`,
+                                        label: `${item.categoria} - ${item.descripcion}`,
+                                    }))}
+                                    className="mt-1"
+                                />
+                            
+                            {/*<input
                                 type="text"
                                 id="caracteristicas"
                                 name="caracteristicas"
                                 value={data.caracteristicas}
                                 onChange={(e) => setData('caracteristicas', e.target.value)}
                                 className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.caracteristicas ? "border-red-500" : ""}`}
-                            />
+                            />*/}
                             {errors.caracteristicas && <span>{errors.caracteristicas}</span>}
                         </div>
 
@@ -204,7 +226,7 @@ export default function Prototipos({ auth }) {
                     </form>
                 </Modal2>
                 {/* obtenerComponentes={obtenerComponentes} */}
-                <TablePrototype onDelete={eliminarPrototipo} data={filteredData} data2={prototipos} />
+                <TablePrototype onDelete={eliminarPrototipo} data={filteredData} data2={prototipos} user={auth.user} componentes={componentes}/>
             </div>
 
         </AuthenticatedLayout>

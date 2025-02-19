@@ -23,6 +23,8 @@
         "react": "^19.0.0",
         "react-barcode": "^1.5.3",
         "react-dom": "^19.0.0",
+        "react-select": "^5.10.0",
+        "select2-react-component": "^6.1.1",
         "sweetalert2": "^11.15.10"
     }
 }
