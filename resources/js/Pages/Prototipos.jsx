@@ -123,7 +123,7 @@ export default function Prototipos({ auth}) {
                 />
 
                 <div className='flex justify-between py-2'>
-                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 mx-5 px-4 rounded" target="_blank" href="http://localhost:8000/componente/pdf">Generar PDF</a>
+                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 mx-5 px-4 rounded" target="_blank" href="http://localhost:8000/prototipos/pdf">Generar PDF</a>
                     <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 mx-5 text-white font-bold py-2 px-4 rounded">
                         Agregar Prototipo
                     </button>
